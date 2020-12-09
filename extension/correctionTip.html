@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="correctionBubble">
+        <span class="close">x</span>
+        <h3>Submit a correction</h3>
+          <label for="falsehoods">What\'s wrong with this text?</label>
+          <select name="falsehoods" required="required" class="mySelect"  id="falsehoods">
+            <option value="">--Select Reason--</option>
+            <option value="context">It lacks appropriate context</option>
+            <option value="false">This has been proven false</option>
+            <option value="opinion">This is an opinion being presented as if it\'s a fact</option>
+            <option value="slippery slope">Tis is a slippery slope argument</option>
+          </select><button class="myButton">Submit</button>
+    </div>
+    <div class="container correctionBubble">
+        <span class="close">x</span>
+        <h3>Submit a correction</h3>
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <select name="falsehoods" class="mySelect"  id="falsehoods">
+                        <option value="" disabled selected>--Select Reason--</option>
+                        <option value="context">It lacks appropriate context</option>
+                        <option value="false">This has been proven false</option>
+                        <option value="opinion">This is an opinion being presented as if it\'s a fact</option>
+                        <option value="slippery slope">Tis is a slippery slope argument</option>
+                    </select>
+                    <label>What's wrong with this text?</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                <textarea id="explanation" class="materialize-textarea"></textarea>
+                <label for="textarea1">Please explain in detail (as much as possible)</label>
+            </div>
+            <div class="row">
+                <button class="myButton right">Submit</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

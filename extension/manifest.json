@@ -1,0 +1,38 @@
+{
+  "name": "Truth Finder",
+  "description": "Truth Finder",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "icons": {
+    "16": "./obj-16x16.png",
+    "32": "./obj-32x32.png",
+    "64": "./obj-64x64.png",
+    "128": "./obj-128x128.png"
+  },
+  "background":{
+    "page": "background.html",
+    "persistent": false
+  },
+  "options_page": "./options.html",
+  "browser_action": {
+    "default_popup": "login_popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "https://www.google.com/*",
+    "activeTab",
+    "contextMenus"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "css": ["styles.css"],
+      "js": ["/scripts/thirdParty/jquery-3.5.1.min.js", "/scripts/thirdParty/materialize.js", "content.js"],
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    "tip.html"
+],
+  "content_security_policy":"script-src 'self' https://cdnjs.cloudflare.com/ https://www.gstatic.com/ https://*.firebaseio.com https://www.googleapis.com; object-src 'self'"
+}

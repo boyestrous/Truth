@@ -1,0 +1,91 @@
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Document</title>
+</head>
+<body>
+    <div class="section">
+    <div class="row">
+        <div class="col l5 s12 m8">
+          <div class="card purple darken-2" id="truthCard">
+            <div class="card-content grey-text text-lighten-4">
+              <p>A conversation is happening about this text. Click below to contribute!</p>
+            </div>        
+            <div class="card-tabs">
+              <ul class="tabs tabs-fixed-width purple darken-1">
+                <li class="tab"><a class="active grey-text text-lighten-1" href="#AQ">Additional Info</a></li>
+                <li class="tab"><a  href="#UAQ" class='grey-text text-lighten-1'>Unanswered Questions</a></li>
+              </ul>
+            </div>
+            <div class="card-content black-text grey lighten-5">
+              <div id="UAQ">
+                <ul class="collapsible">
+                  <li>
+                    <div class="collapsible-header">Why is it like this? </div>
+                    <div class="collapsible-body">
+                        <span>I don't understand how this works! Can someone please explain the rules/procedures about this thing?</span>
+                        <br>
+                        <button class='waves-effect waves-light btn purple darken-2'>Answer</button>
+                    </div>
+                  </li>
+                </ul>
+                <button class="waves-effect waves-light btn purple darken-2" id="newQButton">Submit a new question</button>
+                <div class="container">
+                    <div class="row">
+                        <div class="section" id="qFormContainer" style="display: none">
+                            <h6>Submit Additional Details</h6>
+                            <form id="qForm">
+                                <label for="qShortText">Short Version</label>
+                                <input type="text" name="qShortText" id="qShortText" class='input-field' placeholder="Try to be brief, 5-7 words">
+                                <label for="qDet">Details</label>
+                                <textarea name="details" id="qDet" class="materialize-textarea" style="height: 100px" placeholder="Add as much detail as you like here. Links appreciated!"></textarea>
+                                <button type="submit" class="btn purple darken-2 waves-effect waves-light">Submit</button>
+                                <button id="qCancelButton" type='reset' class="btn purple darken-2 waves-effect waves-light">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div> 
+
+              </div>
+              <div id="AQ">
+                <ul class="collapsible">
+                  <li>
+                    <div class="collapsible-header"><i class="material-icons purple-text text-darken-2">undo</i>This statement was later recanted</div>
+                    <div class="collapsible-body">Although this allegation was made at the time of this writing, the speaker recanted their statement on 12/1/2020. They released a statement saying they had been coerced into providing this testimony under false pretenses.
+                    <br>
+                    <a href="#">Link to article from 12/1/2020</a>
+                    <br>
+                    <button class="btn waves-effect waves-light purple darken-2 disputeButton">Dispute</button>
+                    </div>
+                  </li>
+                </ul>
+                <button class="waves-effect waves-light btn purple darken-2" id="addMoreButton">Add more details</button>
+                <div class="container">
+                    <div class="row">
+                        <div class="section" id="formContainer" style="display: none">
+                            <h6>Submit Additional Details</h6>
+                            <form id="addForm">
+                                <label for="shortText">Short Version</label>
+                                <input type="text" name="shortText" id="shortText" class='input-field' placeholder="Try to be brief, 5-7 words">
+                                <label for="det">Details</label>
+                                <textarea name="details" id="det" class="materialize-textarea" style="height: 100px" placeholder="Add as much detail as you like here. Links appreciated!"></textarea>
+                                <button type="submit" class="btn purple darken-2 waves-effect waves-light">Submit</button>
+                                <button id="cancelButton" type='reset' class="btn purple darken-2 waves-effect waves-light">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                  </div>  
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="scripts/materialize.js"></script>  
+    <script src="scripts/tip.js"></script>
+</body>
+</html>

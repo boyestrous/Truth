@@ -1,0 +1,176 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Truth Finder</title>
+</head>
+<body>
+  <nav class="purple darken-2" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="index.html" class="brand-logo">Logo</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a href="getting_started.html">Getting Started</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li><a href="getting_started.html">Getting Started</a></li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center purple-text text-darken-2">Truth Finder (alpha)</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Put an end to misinformation by adding meaningful context directly to any source!</h5>
+      </div>
+      <div class="row center">
+        <a href="#" id="download-button" class="btn-large waves-effect waves-light purple">Download Alpha</a>
+        <br>
+        <caption>(Windows Only)</caption>
+      </div>
+      <br><br>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="section">
+
+    </div>
+    <div class="section">
+    <!--   Icon Section   -->
+    <div class="row">
+      <div class="col s12 m4">
+        <div class="icon-block">
+          <h2 class="center purple-text text-accent-1"><i class="material-icons large">featured_play_list</i></h2>
+          <h5 class="center">Connects directly to the original source</h5>
+
+          <p class="light center-align">One of the biggest problems with mis-information is that fact-checks are disconnected from the original information. This allows confirmation bias to heavily influence opinions and leads only those who <em>want to disprove something</em> to go searching for a fact-check</p>
+        </div>
+      </div>
+
+      <div class="col s12 m4">
+        <div class="icon-block">
+          <h2 class="center purple-text text-accent-1"><i class="material-icons large">group</i></h2>
+          <h5 class="center">Two way communication</h5>
+
+          <p class="light center align">Fact-checks are traditionally done by reporters or professional fact-checkers. However, with heavy confirmation bias and distrust of the "mainstream media", fact-checks are often ignored by those who don't agree. By enabling two-way communication, those who disagree are given a platform to provide alternative information and strengthen the quality of the fact-check.</p>
+        </div>
+      </div>
+
+      <div class="col s12 m4">
+        <div class="icon-block">
+          <h2 class="center purple-text text-accent-1"><i class="material-icons large">gavel</i></h2>
+          <h5 class="center">Fact-validated</h5>
+
+          <p class="light center-align">Anyone can argue that something is wrong or right. But only those who can back it up with real evidence are helping to move the conversation towards the truth. Our algorithms are designed to promote the sharing of evidence over opinion.</p>
+        </div>
+      </div>
+    </div>
+
+  <div class="divider"></div>
+  
+<iframe src="tip.html" frameborder="0" id="tipFrame"></iframe>
+  <div class="divider"></div>
+  
+  <div class="section">
+    <div class="row">
+      <div class="col"></div>
+      <center>
+        <h2 class="center-text purple-text text-darken-2"> Help Us Grow</h2>
+      </center>
+        <p class='light'>We're looking for truth-minded individuals to help us build our database of fact-checks. With this information, we will continue to refine the types of falsehoods that permeate our sources of information in order to better and more easily identify ways that we are being mislead. 
+          <br>
+          <br>
+            If you're interested in helping, please contact us at <a href="mailto:#" class="truncate">example@truthfinderfactcheckdomainnotpurchasedyet.com</a>
+        </p>
+       </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+    <div class="section">
+
+      <h3 class="center purple-text text-darken-2">Example Submissions</h3>
+      <table id='correctionTable' class='table striped'>
+        <tr>
+          <th class='offendingText'>Offending Text</th>
+          <th class='explanation'>Explanation from User</th>
+          <th class="hostname">Hostname</th>
+          <th class="user">Submitting User</th>
+        </tr>
+      </table>
+  </div>
+
+
+  <div id="correctionBubble">
+    <span class="close">x</span>
+    <h3>Submit a correction</h3>
+    <form class="col s12">
+        <div class="row">
+            <div class="input-field col s12">
+                <label>What's wrong with this text?</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12" style="margin-top: 10px;">
+            <label for="explanation" >Please explain in detail (as much as possible)</label>
+            <textarea id="explanation" class="materialize-textarea" style="width: 90%; height: 100px"></textarea>
+        </div>
+        <div class="row">
+            <button type="button" class="myButton right">Submit</button>
+        </div>
+    </form>
+  </div>
+  </div>
+  <br><br>
+</div>
+
+
+  <footer class="page-footer purple darken-2">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Company Bio</h5>
+          <p class="grey-text text-lighten-4">We are a team of normal people who are sick and tired of the constant barrage of obvious (and non-obvious) mis-information being circulated in our respective "echo chambers". This is not our full-time work, but rather a necessary passion project aimed at calming the political atmosphere and bringing the world back together.</p>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Settings</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5 class="white-text">Connect</h5>
+          <ul>
+            <li><a class="white-text" href="#!">Link 1</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+    </div>
+  </footer>
+
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+  <!-- Add the entire Firebase JavaScript SDK -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-storage.js"></script>
+  <!--<script src="/__/firebase/init.js"></script>-->
+  <!-- <script src="scripts/firebaseexample.js"></script> -->
+  <!-- <script src="scripts/codingtrainexample.js"></script>-->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="scripts/materialize.js"></script>  
+  <script src="scripts/indexlist.js"></script>
+</body>
+
+</html>

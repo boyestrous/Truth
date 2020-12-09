@@ -1,0 +1,235 @@
+#correctionBubble {
+    width: 355px;
+    max-width: 355px;
+    position: absolute;
+    display: none;
+    z-index: 1000;
+    background-color: #5d49cc;
+    color: white;
+    border: 1px solid #AB4141;
+    padding: 15px;
+    box-shadow: 0px 3px 2px #8D8D8D;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    border: #D6D2D2 solid 1px;
+    margin: 0px;
+}
+
+#correctionBubble .row {
+  margin: 0px;
+}
+#correctionBubble:after
+{
+    content: '';
+    position: absolute;
+    border-style: solid;
+    border-width: 0 20px 20px;
+    border-color: #5d49cc transparent;
+    display: block;
+    width: 0;
+    z-index: 1;
+    top: -20px;
+    left: 70px;
+}
+
+#popCard {
+  display: none;
+}
+.hello {
+    background-color: red;
+  }
+  
+.modal-overlay {
+  display: none;
+}
+
+  /* effect-shine */
+.effect-shine:hover {
+  -webkit-mask-image: linear-gradient(-75deg, rgba(0,0,0,.6) 30%, #000 50%, rgba(0,0,0,.6) 70%);
+  -webkit-mask-size: 200%;
+  animation: shine 2s infinite;
+}
+
+@-webkit-keyframes shine {
+  from {
+    -webkit-mask-position: 150%;
+  }
+  
+  to {
+    -webkit-mask-position: -50%;
+  }
+}
+
+
+  #links {
+    text-align: justify;
+    -ms-text-justify: distribute-all-lines;
+    text-justify: distribute-all-lines;
+  }
+  
+  .truthTable, truthTh, truthTd {
+    border: 1px solid black;
+  }
+  
+  .reason {
+    width: 20%;
+    max-width: 150px;
+  }
+  
+  .sentence {
+    width: 80%;
+  }
+  
+  .link{
+    max-width: 150px;
+    vertical-align: top;
+    display: inline-block;
+    *display: inline;
+    zoom: 1;
+    margin-left: 10px;
+  }
+  .tooltip {
+      width: 355px;
+      max-width: 355px;
+      position: absolute;
+      display: none;
+      z-index: 1000;
+      background-color: #5d49cc;
+      color: white;
+      border: 1px solid #AB4141;
+      padding: 15px;
+      box-shadow: 0px 3px 2px #8D8D8D;
+      -webkit-border-radius: 10px;
+      -moz-border-radius: 10px;
+      border-radius: 10px;
+      border: #D6D2D2 solid 1px;
+  }
+  
+  .card {
+    max-width: 500px;
+  }
+
+  .tooltip:after
+  {
+      content: '';
+      position: absolute;
+      border-style: solid;
+      border-width: 0 20px 20px;
+      border-color: #5d49cc transparent;
+      display: block;
+      width: 0;
+      z-index: 1;
+      top: -20px;
+      left: 70px;
+  }
+  
+  .close,#closeTipFrame{
+    top: 2.75rem;
+    right: 1rem;
+    position: absolute;
+    color: white;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    font-size: 22px;
+    cursor: pointer;
+    margin-top: -1.5rem;
+  }
+
+  .centered {
+    position: fixed; /* or absolute */
+    top: 50%;
+    left: 50%;
+    margin-top: -150px;
+    margin-left: -200px;
+  }
+
+  #tipFrameContainer {
+   overflow: hidden;
+   height: 100%;
+   width: 100%;
+   max-width: 500px;
+   z-index: 1000;
+   display: none;
+  }
+  
+  .correction {
+    box-shadow: inset 0 0px 0 white, inset 0 -2px 0 #cc25ab;
+  }
+  
+  .correction::after {
+    box-shadow: inset 0 0px 0 white, inset 0 -2px 0 #cc25ab;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .grow {
+    transition: all 0.5s ease-in-out;
+  }
+  
+  .grow:hover {
+     transform: scale(1.05);
+   }
+  
+  .myButton {
+      background-color:#ffffff;
+      border-radius:28px;
+      display:inline-block;
+      cursor:pointer;
+      color:#000000;
+      font-family:Arial;
+      font-size:17px;
+      padding:2px 4px;
+    margin-top: 5px;
+  }
+  .myButton:hover {
+      background-color:#dedede;
+  }
+  .myButton:active {
+      position:relative;
+      top:1px;
+  }
+  
+  .pic {
+    border: 5px solid #1C6EA4;
+    padding: 10px;
+    
+  }
+  
+  .mySelect {
+    margin-top: 5px;
+    width: 90%;
+  }
+  
+  
+  .tip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tip .tiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+  
+  
+    top: 100%;
+    left: 50%;
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .tip:hover .tiptext {
+    visibility: visible;
+  }
+  

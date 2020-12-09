@@ -1,0 +1,64 @@
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>Getting Started</title>
+    </head>
+<body>
+    <nav class="purple darken-2" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="index.html" class="brand-logo">Logo</a>
+          <ul class="right hide-on-med-and-down">
+            <li><a href="getting_started.html">Getting Started</a></li>
+          </ul>
+    
+          <ul id="nav-mobile" class="sidenav">
+            <li><a href="getting_started.html">Getting Started</a></li>
+          </ul>
+          <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        </div>
+      </nav>
+    <div class="container">
+        <div class="section">
+          <h1 class="header center purple-text text-darken-2">How It Works</h1>
+          <p class="light">
+          There are so many mis-truths in the world these days. Sometimes they are hiding in plain sight, for example, if I were to tell you that <span id='uxStep1'>2+2=5, </span> you would easily know that this information is false. As stated before, a fact-check article on a third-party website is less effective at dispelling these mis-truths than if one were able to correct the information directly <em>ON</em> the source.
+          </p>
+          <p class="light">Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam nam ut eius molestiae doloremque repellat quisquam deserunt fugit, in sed magni quos. Hic dignissimos minus aperiam quasi, nesciunt ab adipisci. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Magni at a, quasi quaerat necessitatibus maiores voluptatem facere est, cupiditate nesciunt soluta repellendus dolore molestiae minima modi excepturi consectetur delectus sapiente? Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur vel minus exercitationem consequatur. Fuga obcaecati doloribus provident in reprehenderit perspiciatis odio deserunt a molestiae. Distinctio nisi sint suscipit nesciunt quidem?</p> 
+          <p class="light"><span >Highlight this text</span> Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat aperiam, voluptatem deserunt, molestiae ipsa iste aspernatur repellendus, totam vero facilis nulla. Ex quod laborum delectus fugit eaque, corporis cupiditate rerum!
+          </p>
+        </div>
+    </div>
+    
+
+    
+    <div id="correctionBubble">
+        <div>
+          <span class="close">x</span>
+          <h3>Submit a correction</h3>
+          <form>
+            <div class="row"> 
+              <textarea style="min-height: 130px;" id="explanation" class="materialize-textarea" placeholder="Please explain in as much detail as possible"></textarea>
+            </div>
+            <div class="row">
+              <button type="button" class="myButton right">Submit</button>
+            </div>
+          </form>
+        </div>
+    </div>
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>You Did It!</h4>
+        <p>It's that easy. With Truth Finder, adding meaningful context is just one-or-two clicks away from any article or source of information.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Done</a>
+      </div>
+    </div>
+  <script src="scripts/jquery-3.5.1.min.js"></script>
+  <script src="scripts/uxTour.js"></script>
+  <script src="scripts/materialize.min.js"></script>  
+  <script src="scripts/getting_started.js"></script>
+</body>
+</html>
