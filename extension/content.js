@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 
   //grab hostname matches from the DB for highlighting
-  pullHostnameMatchesFromDB(hostname);
+  // pullHostnameMatchesFromDB(hostname);
   stripNewlines();
 
   //listen for the context menu click event (chrome right-click)
@@ -37,16 +37,12 @@ $(document).ready(function() {
       }
 
       if (request.command == 'new_match') {
-        console.log('request data: ', request.data.hostname)
-        if (request.data.hostname == hostname) {
-          preCorrection(request.data);
-          sendResponse({confirm: "new match received"}); 
-          return true;
-        } else {
-          sendResponse({confirm: "NO MATCH!"});
-          return true;
-        }
-               
+        // console.log('request data from updated firestore: ', request.data)
+        // console.log(request.data[0].id);
+        dbMatches = request.data;
+        dbMatches.forEach(preCorrection);
+        sendResponse({confirm: "new match confirm"})
+        return true;       
       }
 
       
@@ -59,27 +55,27 @@ $(document).ready(function() {
   }
 
   //pull Hostname matches from DB, so we can compare against the current page and highlight
-  function pullHostnameMatchesFromDB(hostname){
-    var hostname = hostname;
-    chrome.runtime.sendMessage({command: "match", data: hostname}, function(response) {
-      //console.log(response.confirm);
-      dbMatches = response.confirm;
-      console.log(dbMatches); 
-      matchFinder();
-    });
-  };
+  // function pullHostnameMatchesFromDB(hostname){
+  //   var hostname = hostname;
+  //   chrome.runtime.sendMessage({command: "match", data: hostname}, function(response) {
+  //     //console.log(response.confirm);
+  //     dbMatches = response.confirm;
+  //     console.log(dbMatches); 
+  //     matchFinder();
+  //   });
+  // };
 
-  function matchFinder() {
-    // console.log(dbMatches);
-    dbMatches.forEach(preCorrection);
+  // function matchFinder() {
+  //   // console.log(dbMatches);
+  //   dbMatches.forEach(preCorrection);
 
     
-    // tipAdder();
-  }
+  //   // tipAdder();
+  // }
   function preCorrection(item, index) {
     if($('*:contains(' + item.highlight + ')').length > 0){
       $('*:contains(' + item.highlight + ')').last().html(function(_, html) {
-        return html.replace(item.highlight, '<span class="correction effect-shine" id="'+item.key+'">'+item.highlight+'</span>');
+        return html.replace(item.highlight, '<span class="correction effect-shine" id="'+item.id+'">'+item.highlight+'</span>');
       });
       
     }
@@ -112,10 +108,11 @@ $(document).ready(function() {
     e.preventDefault();
     
     correctionID = this.id;
-    console.log(correctionID);
+    // console.log(correctionID);
 
     chrome.runtime.sendMessage({command: "fetch", id: correctionID}, function(response) {
-      console.log(response.confirm);
+      // console.log("confirmation: ", response.confirm);
+      // console.log("complaints found: ", response);
       complaintFiller(response.complaints, correctionID);
       // console.log('found complaints: ', response.complaints)
     });
@@ -125,33 +122,42 @@ $(document).ready(function() {
 
   });
 
+  function iFrameHeight() {
+    chrome.runtime.sendMessage({command: "card_height"}, function(response) {
+      console.log('height: ',response.height);
+      $('#tipFrameContainer').css('height', response.height + 30)
+    }); 
+  }
+
   function complaintFiller(complaintArray, correctionID) {
-    //clear out examples
     comparr = complaintArray;
     //send message to tip.js with complaints
     chrome.runtime.sendMessage({command: "complaints", complaints: comparr, id: correctionID}, function(response) {
-      //console.log("data sent");
-      //console.log("background sentence: " + data.hostname);
       console.log(response.confirm);
+      iFrameHeight();
     });
-
   }
 
 
   function dropAdder() {
     tipURL = chrome.extension.getURL('tip.html');
-    const newDrop = `
-    <div id='tipFrameContainer'>
+    const newDrop = $(`
+    <div id='tipFrameContainer' style='position: absolute'>
     <span id="closeTipFrame">x</span>
     <iframe src="${tipURL}" style="width: 100%; height: 100%" frameborder="0" id="tipFrame"></iframe>
     </div>
-    `;
-    var newDropBubble = newDrop;
-    $("body").append(newDropBubble);
+    `).draggable();
+    var newDropBubble = $("body").append(newDrop);
+    // $("#tipFrameContainer").wrap(wrapper);
     
   }
  
-  
+  $('#tipFrame').on('load', function(iframe) {
+    console.log('starting resize', iframe);
+    chrome.runtime.sendMessage({command: "card_height"}, function(response) {
+      console.log('height: ',response.height);
+    });
+  });
 
   function bubbleAdder() {
     //inject correctionBubble div to the bottom of the page (hidden)
@@ -184,6 +190,20 @@ $(document).ready(function() {
     dropAdder();
   }
   const correctionBub = document.querySelector("#correctionBubble");
+  
+  // window.addEventListener('DOMContentLoaded', function(e) {
+  
+  //   var iFrame = document.getElementById( 'tipFrame' );
+  //   resizeIFrameToFitContent( iFrame );
+  
+  //   // or, to resize all iframes:
+  //   var iframes = document.querySelectorAll("iframe");
+  //   for( var i = 0; i < iframes.length; i++) {
+  //       resizeIFrameToFitContent( iframes[i] );
+  //   }
+  // } );
+
+
 
   function getSelectionText() {
     var text = "";
@@ -235,14 +255,19 @@ $(document).ready(function() {
   $(document).on('click','.myButton',function(e){
     e.preventDefault();
         var data = {
-        complaints: [{id: user.uid+Date.now(),dateTime: Date.now(),user: user.email, short: $('#short').val(), details: $('#details').val()}],
-        fullText: fullText,
-        highlight: highlightedText,
-        hostname: hostname,
-        url: window.location.href
-      }
+          highlight: highlightedText,
+          fullText: fullText,
+          hostname: hostname,
+          url: window.location.href
+        };
+        var complaint = {
+          short: $('#short').val(),
+          details: $('#details').val(),
+          dateTime: Date.now(),
+          user: user.email,
+        };
     //console.log(data);
-    chrome.runtime.sendMessage({command: "push", data: data}, function(response) {
+    chrome.runtime.sendMessage({command: "push", correction: data, complaint: complaint}, function(response) {
       //console.log("data sent");
       //console.log("background sentence: " + data.hostname);
       console.log(response.confirm);
@@ -262,4 +287,10 @@ $(document).ready(function() {
     e.preventDefault();
     $("#tipFrameContainer").css('display','none');
   });
+});
+
+$('#tipFrameContainerheader').draggable({
+  cursor: 'pointer',      // sets the cursor apperance
+  opacity: 0.35,          // opacity fo the element while it's dragged
+  stack: $('#dg2'),       // brings the '#dg1' item to front
 });

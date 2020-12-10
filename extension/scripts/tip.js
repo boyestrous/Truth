@@ -4,31 +4,32 @@ $(document).ready(function() {
     $('.collapsible').collapsible();
 
     var currentComplaintID = '';
-});
 
-$('#addMoreButton').on('click', function() {
-    $(this).fadeOut();
-    $('#formContainer').show();
-});
+    console.log("cardContainer: ", $('#cardContainer'));
 
-$('#newQButton').on('click', function() {
-    $(this).fadeOut();
-    $('#qFormContainer').show();
+  $('#addMoreButton').on('click', function() {
+      $(this).fadeOut();
+      $('#formContainer').show();
+  });
+
+  $('#newQButton').on('click', function() {
+      $(this).fadeOut();
+      $('#qFormContainer').show();
 });
 
 // const addForm = document.getElementById('#addForm');
 // console.log(addForm);
-$("#addForm").on('submit', function (e) {
+  $("#addForm").on('submit', function (e) {
     e.preventDefault();
 
-    console.log('submitted');
+    // console.log('submitted');
     const addForm = document.getElementById('addForm');
 
     var shorty = addForm['shortText'].value;
-    console.log('short: ', shorty);
+    // console.log('short: ', shorty);
 
     var detail = addForm['det'].value;
-    console.log('details: ', detail);
+    // console.log('details: ', detail);
 
     var newItem = document.createElement('li');
     var colHeader = document.createElement('div');
@@ -57,13 +58,10 @@ $("#addForm").on('submit', function (e) {
     updateData['short'] = addForm['shortText'].value;
     updateData['details'] = addForm['det'].value;
     updateData['dateTime'] = Date.now();
-    updateData['id'] = currentComplaintID;
-    updateData['numComplaints'] = currentComplaintListLength;
+    updateData['correction_id'] = currentComplaintID;
+    // updateData['numComplaints'] = currentComplaintListLength;
     currentComplaintListLength = currentComplaintListLength + 1;
-    chrome.runtime.sendMessage({command: "update", data: updateData}, function(response) {
-      console.log(response.confirm);
-      // console.log('found complaints: ', response.complaints)
-    });
+    chrome.runtime.sendMessage({command: "new_complaint", data: updateData});
 
     $("#formContainer").hide();
     $("#addMoreButton").fadeIn();
@@ -119,6 +117,7 @@ $("#addForm").on('submit', function (e) {
     $("#addForm")[0].reset();
   });
 
+  
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.command == "complaints") {
       //clear example list
@@ -127,15 +126,15 @@ $("#addForm").on('submit', function (e) {
       currentComplaintListLength = request.complaints.length;
       //fill with values
       for (let index = 0; index < request.complaints.length; index++) {
-        console.log("short: ",request.complaints[index].short);
-        console.log("details: ",request.complaints[index].details);
+        // console.log("short: ",request.complaints[index].short);
+        // console.log("details: ",request.complaints[index].details);
         
         var p = document.createElement('li');
         p.id = "complaint" + index;
         var colHeader = document.createElement('div');
         colHeader.className = 'collapsible-header';
         colHeader.innerText = request.complaints[index].short;
-        console.log('col Header: ',colHeader);
+        // console.log('col Header: ',colHeader);
 
 
         var colBody = document.createElement('div');
@@ -153,8 +152,15 @@ $("#addForm").on('submit', function (e) {
         //   <div class="collapsible-body"></div>
         // </li>
       }
-      
-      sendResponse({confirm: 'confirmed complaints'});
+      sendResponse({confirm: 'complaints complete'});
+      return true;
+    }
+
+    if (request.command == "card_height") {
+      var current_height = $(".row").outerHeight(true);
+      console.log('current height from tip: ', current_height);
+      sendResponse({height: current_height});
       return true;
     }
   });
+});

@@ -15,15 +15,39 @@ const firebaseConfig = {
   const database = firebase.database();
 
 
-//  var correctionRef = database.ref('corrections');
+
 var correctionRef = firebase.database().ref("corrections");
-// console.log("correctionRefs: " + correctionRef);
+var dbRef = db.collection('complaints');
+var hostname = '';
 var hostnameMatches = [];
 var filteredArray = [];
 var currentUser = {};
 
+function queryForHostname() {
+  var idsForComplaints = [];
+  db.collection("corrections").where("hostname", "==", hostname)
+      .onSnapshot(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+              var docData = doc.data();
+              //append ID to the object, so it can be attached to created HTML objects in content.js
+              docData['id'] = doc.id;
+              hostnameMatches.push(docData);
+          });
+          chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {command: "new_match", data: hostnameMatches});
+          });
+      });
+}    
 
-correctionRef.on('value', gotData, errData)
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status == 'complete' && tab.status == 'complete' && tab.url != undefined && tab.active == true && !tab.url.startsWith('chrome')) {
+    // console.log('tab url: ', tab.url);
+    tabURL = new URL(tab.url);
+    hostname = tabURL.hostname;
+    console.log('tab hostname from listener: ', hostname);
+    queryForHostname();
+  }
+});
 
 // var newPostKey = firebase.database().ref().child('posts').push().key;
 
@@ -48,16 +72,6 @@ function gotData(data) {
   }
   
 }
-
-function errData(err) {
-  console.log("error: ", err);
-}
-//   snap => {
-//   hostnameMatches.push({key: snap.key, highlight: snap.child('highlight').val(), hostname: snap.child('hostname').val()});
-//   console.log("host matches: ",hostnameMatches);
-//   console.log('snap k: ', snap.val());
-// });
-
 
 //listen for auth status changes
 auth.onAuthStateChanged(user => {
@@ -98,56 +112,47 @@ auth.onAuthStateChanged(user => {
 
 //listen for requests for DB access from other scripts
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
- 
-    //send data to DB
+     //send data to DB
     if (request.command == "push"){
-      correctionRef.push(request.data);
+      db.collection('corrections').add(request.correction)
+      .then(function(docRef) {
+          console.log("Document written with ID: ", docRef.id);
+          //get newly created DOC ID, then create corresponding complaint record
+          newComplaint = request.complaint;
+          newComplaint['correction_id'] = docRef.id;
+          db.collection('complaints').add(newComplaint)
+          .then(function(docCompRef) {
+              console.log("Document written with ID: ", docCompRef.id);
+          })
+          .catch(function(error) {
+              console.error("Error adding document: ", error);
+          });;
+      })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });;
+      
       sendResponse({confirm: "data pushed: " + request.data});
       return true;
     }
 
-    if (request.command == 'update'){
-      console.log('data from update request: ',request.data);
-      updateData = {
+    if (request.command == 'new_complaint'){
+      // console.log('data from new complaint request: ',request.data);
+      newComplaintData = {
         dateTime: request.data.dateTime,
         details: request.data.details,
-        id: request.data.id + request.data.dateTime,
+        correction_id: request.data.correction_id,
         short: request.data.short,
-        user: currentUser['email']
+        user: currentUser['uid']
       }
-      console.log('updateData', updateData);
-      complaintsCount = request.data.numComplaints;
-      preppedUpdate = {};      
-      preppedUpdate['/'+request.data.id+'/complaints/'+complaintsCount+'/'] = updateData; 
-      console.log("PU: ",preppedUpdate); 
-      correctionRef.update(preppedUpdate);
-      sendResponse({confirm: "update command confirm"});
-      return true;
-    }
-
-    //check for records with the same url/hostname in the DB, return an array of sentences for matching against the current page
-    if (request.command == 'match') {
-      var respSentences = [];
-      
-      filteredArray = hostnameMatches.filter(function( obj ) {
-        // console.log("obj host: ", obj.hostname);
-        // console.log('req data: ', request.data);
-        return obj.hostname === request.data;
-      });
-        // console.log("filteredArray: ", filteredArray);
-        filteredArray.forEach(item => respSentences.push({key: item.key, highlight: item.highlight}));
-        // console.log("filtered sentences only: ", respSentences);
-        sendResponse({confirm: respSentences});
-        return true;
-    };
-
-    //return amount of matches for the current hostname. Used to display on the user_popup
-    if (request.command == 'countMatches') {
-      filteredArray = hostnameMatches.filter(function( obj ) {
-        return obj.hostname === request.data;
-      })
-      sendResponse({confirm: filteredArray.length});
-      return true;
+      // console.log('new_complaint Data', newComplaintData);
+      db.collection('complaints').add(newComplaintData)
+          .then(function(docCompRef) {
+              // console.log("Document written with ID: ", docCompRef.id);
+          })
+          .catch(function(error) {
+              console.error("Error adding document: ", error);
+          });;
     }
 
     //submit signup details to auth
@@ -185,11 +190,22 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //fetch
     if(request.command =='fetch') {
       console.log('fetch command');
-      console.log('current hostnameMatches variable: ', hostnameMatches);
-
-      var found = searchForId(request.id, hostnameMatches)
-      console.log("found: ", found.complaints.length)
-      sendResponse({confirm: 'fetch confirmed', complaints: found.complaints});
+      var complaints = [];
+      db.collection("complaints").where("correction_id", "==", request.id)
+          .get()
+          .then(function(querySnapshot) {
+              querySnapshot.forEach(function(doc) {
+                  // doc.data() is never undefined for query doc snapshots
+                  var iterdata = doc.data();
+                  iterdata.id = doc.id;
+                  complaints.push(iterdata);
+              });
+              console.log("matching complaints: ", complaints);
+              sendResponse({confirm: 'fetch confirmed', complaints: complaints});
+          })
+      .catch(function(error) {
+          console.log("Error getting documents: ", error);
+      });    
       return true;
     }
 
@@ -207,11 +223,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       sendResponse({confirm: "signed out"});
     }
 });
-
-function searchForId(nameKey, myArray){
-  for (var i=0; i < myArray.length; i++) {
-      if (myArray[i].key === nameKey) {
-          return myArray[i];
-      }
-  }
-}
