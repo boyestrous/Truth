@@ -54,24 +54,6 @@ $(document).ready(function() {
     });
   }
 
-  //pull Hostname matches from DB, so we can compare against the current page and highlight
-  // function pullHostnameMatchesFromDB(hostname){
-  //   var hostname = hostname;
-  //   chrome.runtime.sendMessage({command: "match", data: hostname}, function(response) {
-  //     //console.log(response.confirm);
-  //     dbMatches = response.confirm;
-  //     console.log(dbMatches); 
-  //     matchFinder();
-  //   });
-  // };
-
-  // function matchFinder() {
-  //   // console.log(dbMatches);
-  //   dbMatches.forEach(preCorrection);
-
-    
-  //   // tipAdder();
-  // }
   function preCorrection(item, index) {
     if($('*:contains(' + item.highlight + ')').length > 0){
       $('*:contains(' + item.highlight + ')').last().html(function(_, html) {
@@ -123,6 +105,7 @@ $(document).ready(function() {
   });
 
   function iFrameHeight() {
+    console.log('starting resize');
     chrome.runtime.sendMessage({command: "card_height"}, function(response) {
       console.log('height: ',response.height);
       $('#tipFrameContainer').css('height', response.height + 30)
@@ -151,13 +134,6 @@ $(document).ready(function() {
     // $("#tipFrameContainer").wrap(wrapper);
     
   }
- 
-  $('#tipFrame').on('load', function(iframe) {
-    console.log('starting resize', iframe);
-    chrome.runtime.sendMessage({command: "card_height"}, function(response) {
-      console.log('height: ',response.height);
-    });
-  });
 
   function bubbleAdder() {
     //inject correctionBubble div to the bottom of the page (hidden)

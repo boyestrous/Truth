@@ -5,8 +5,6 @@ $(document).ready(function() {
 
     var currentComplaintID = '';
 
-    console.log("cardContainer: ", $('#cardContainer'));
-
   $('#addMoreButton').on('click', function() {
       $(this).fadeOut();
       $('#formContainer').show();
@@ -157,7 +155,7 @@ $(document).ready(function() {
     }
 
     if (request.command == "card_height") {
-      var current_height = $(".row").outerHeight(true);
+      var current_height = $("#cardContainer").outerHeight(true);
       console.log('current height from tip: ', current_height);
       sendResponse({height: current_height});
       return true;
