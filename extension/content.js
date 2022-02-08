@@ -11,13 +11,17 @@ $(document).ready(function() {
   const detailedExplanationText = document.querySelector('#details');
   var posY = 0;
   var posX = 0;
+  var tipHeight = "300px";
 
   //INITIALIZE PAGE
   //inject correctionBubble div to the bottom of the page (hidden)
   bubbleAdder();
   
   // cardAdder();
-
+  String.prototype.indexOfEnd = function(string) {
+    var io = this.indexOf(string);
+    return io == -1 ? -1 : io + string.length;
+  }
 
   //grab hostname matches from the DB for highlighting
   // pullHostnameMatchesFromDB(hostname);
@@ -41,8 +45,14 @@ $(document).ready(function() {
         // console.log(request.data[0].id);
         dbMatches = request.data;
         dbMatches.forEach(preCorrection);
-        sendResponse({confirm: "new match confirm"})
+        sendResponse({confirm: "new match confirm"});
         return true;       
+      }
+
+      if (request.command == "tip_height") {
+        //this is from iframe to content (click events on unreachable html elements in an iframe)
+        // console.log('height received in from tip_height: ', request.height);
+        $("#tipFrameContainer").css('height', request.height + 50);
       }
 
       
@@ -56,7 +66,7 @@ $(document).ready(function() {
 
   function preCorrection(item, index) {
     if($('*:contains(' + item.highlight + ')').length > 0){
-      $('*:contains(' + item.highlight + ')').last().html(function(_, html) {
+      $('*:contains(' + item.highlight + ')').last().html(function(_,html) {
         return html.replace(item.highlight, '<span class="correction effect-shine" id="'+item.id+'">'+item.highlight+'</span>');
       });
       
@@ -64,13 +74,28 @@ $(document).ready(function() {
     // console.log('post-replace');
   }
 
+
+$("*:contains('sendResponse was')").last().html(function(_,html) {
+  begIndex = html.indexOf('sendResponse');
+  endIndex = html.indexOfEnd('synchronously');
+  console.log("begIndex", begIndex); 
+  console.log("begIndex", endIndex); 
+  // console.log([html.slice(0, begIndex), "<span>", html.slice(begIndex+6,endIndex), "</span>"].join(''));
+  
+  //find beginning of string (index of first character), prepend SPAN
+  //find end of string (index of last character) use Prototype function. append SPAN
+  //IF a tag starts before beginning and ends in the middle, this will break: <code> blah <span> bleh blah </code></span>
+  //IF string between start and end contains "</*>", add SPAN in front, then find "<*>"" and add SPAN after.
+  return [html.slice(0, begIndex), "SPAN", html.slice(begIndex,endIndex), "SPAN", html.slice(endIndex)].join('');
+});
+
   function getUsername(){
     var username = '';
     chrome.runtime.sendMessage({command: "getUsername"}, (response) => {
-      console.log("username response: ", response.email);
-      console.log('response: ', response);
+      // console.log("username response: ", response.email);
+      // console.log('response: ', response);
       user = {uid: response.uid, email: response.email};
-      console.log(user);
+      // console.log(user);
       // console.log('uid: ', response.uid + Date.now());
     });
   }
@@ -91,6 +116,12 @@ $(document).ready(function() {
     
     correctionID = this.id;
     // console.log(correctionID);
+    dropAdder();
+
+    $('#tipFrameContainer').addClass('centered');
+    $('#tipFrameContainer').css('display','flex');
+
+    
 
     chrome.runtime.sendMessage({command: "fetch", id: correctionID}, function(response) {
       // console.log("confirmation: ", response.confirm);
@@ -99,31 +130,27 @@ $(document).ready(function() {
       // console.log('found complaints: ', response.complaints)
     });
 
-    $('#tipFrameContainer').addClass('centered');
-    $('#tipFrameContainer').css('display','flex');
-
   });
 
   function iFrameHeight() {
-    console.log('starting resize');
+    // this is from content to iframe, using the response to get the height
     chrome.runtime.sendMessage({command: "card_height"}, function(response) {
-      console.log('height: ',response.height);
-      $('#tipFrameContainer').css('height', response.height + 30)
-    }); 
-  }
+      // console.log('height response in from card_height: ', response.height);
+      $("#tipFrameContainer").css('height', response.height + 50);
+    });
+  } 
 
   function complaintFiller(complaintArray, correctionID) {
     comparr = complaintArray;
     //send message to tip.js with complaints
-    chrome.runtime.sendMessage({command: "complaints", complaints: comparr, id: correctionID}, function(response) {
-      console.log(response.confirm);
-      iFrameHeight();
-    });
+    chrome.runtime.sendMessage({command: "complaints", complaints: comparr, id: correctionID});
+    iFrameHeight();
   }
 
 
   function dropAdder() {
     tipURL = chrome.extension.getURL('tip.html');
+    // console.log('tip URL: ', tipURL);
     const newDrop = $(`
     <div id='tipFrameContainer' style='position: absolute'>
     <span id="closeTipFrame">x</span>
@@ -163,7 +190,7 @@ $(document).ready(function() {
     </div>`;
     var correctionBubble = newLocal;
     $("body").append(correctionBubble);
-    dropAdder();
+    // dropAdder();
   }
   const correctionBub = document.querySelector("#correctionBubble");
   
@@ -256,12 +283,14 @@ $(document).ready(function() {
   $('.close').on('click', function(e) {
     e.preventDefault();
     $(".tempSelected").removeClass('tempSelected');
-    console.log($('.tempSelected'));
+    $("#correctionBubble").fadeOut();
+    $("#correctionBubble").find('form').trigger('reset');
   });
 
  $("body").on('click','#closeTipFrame', function(e) {
     e.preventDefault();
-    $("#tipFrameContainer").css('display','none');
+    var tipFrame = document.getElementById('tipFrameContainer');
+    tipFrame.parentNode.removeChild(tipFrame);
   });
 });
 

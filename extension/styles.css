@@ -147,7 +147,7 @@
     margin-left: -200px; */
   }
 
-  #tipFrameContainer {
+  #tipFrameContainer{
    overflow: auto;
    height: 100%;
    width: 100%;
@@ -159,6 +159,7 @@
    background-color: #7b1fa2;
    /* border: 1px solid #d3d3d3; */
    text-align: center;
+   transition: all .25s linear;
   }
   
   #tipFrameContainerheader {

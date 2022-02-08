@@ -32,17 +32,17 @@ logoutButton.addEventListener('click', (e) => {
 
 });
 
-//get hostname for displaying the list of qualities about the domain
-chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    var tab = tabs[0];
-    var url = new URL(tab.url)
-    var domain = url.hostname
-      //get count of collection entries with a matching domain
-    chrome.runtime.sendMessage({command: 'countMatches', data: domain}, (response) => {
-        console.log('count response: ', response.confirm);
-        collectionUrl.innerHTML = 
-        `
-        ${domain}<span class="badge" data-badge-caption="corrections">${response.confirm}</span>
-        `
-    });
-})
+// //get hostname for displaying the list of qualities about the domain
+// chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+//     var tab = tabs[0];
+//     var url = new URL(tab.url)
+//     var domain = url.hostname
+//       //get count of collection entries with a matching domain
+//     chrome.runtime.sendMessage({command: 'countMatches', data: domain}, (response) => {
+//         console.log('count response: ', response.confirm);
+//         collectionUrl.innerHTML = 
+//         `
+//         ${domain}<span class="badge" data-badge-caption="corrections">${response.confirm}</span>
+//         `
+//     });
+// })

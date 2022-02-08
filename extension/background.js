@@ -5,6 +5,7 @@ var fullText = "";
 user = ''
 
 
+
 var contextMenuItem = {
     "id": "add context",
     "title": "Add Context",

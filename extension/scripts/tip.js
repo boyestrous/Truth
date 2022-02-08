@@ -69,14 +69,14 @@ $(document).ready(function() {
   $("#qForm").on('submit', function (e) {
     e.preventDefault();
 
-    console.log('submitted');
+    // console.log('submitted');
     const qForm = document.getElementById('qForm');
 
     var shorty = qForm['qShortText'].value;
-    console.log('short: ', shorty);
+    // console.log('short: ', shorty);
 
     var detail = qForm['qDet'].value;
-    console.log('details: ', detail);
+    // console.log('details: ', detail);
 
     var newItem = document.createElement('li');
     var colHeader = document.createElement('div');
@@ -104,17 +104,41 @@ $(document).ready(function() {
     $("#addForm")[0].reset();
   });
 
-  $("#AQ li button").on('click', function() {
-    console.log('dispute clicked');
-    console.log($(this).parent());
-  });
-
   $("#cancelButton").on('click', function() {
     $("#formContainer").hide();
     $("#addMoreButton").fadeIn();
     $("#addForm")[0].reset();
   });
 
+  // $(".card-tabs .tab").on('click', function() {
+  //   // console.log('tab clicked');
+
+  //   setTimeout(() => {
+  //     var current_height =  document.getElementById('cardContainer').getBoundingClientRect().height;
+  //     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  //       chrome.tabs.sendMessage(tabs[0].id, {command: "change_tabs", height: current_height});
+  //     });
+  //   }, 350);
+  // });
+
+  $(".collapsible,.card-tabs .tab, #addMoreButton, #cancelButton, #submitButton").on('click', function() {
+    //when changing tabs or opening a collapsible, tell the content script to resize the iframe
+    //delay is necessary so the transition events have time to complete before checking the size
+    setTimeout(() => {
+      sendHeight();
+    }, 350);
+
+  });
+
+  function sendHeight() {
+      var current_height =  document.getElementById('cardContainer').getBoundingClientRect().height;
+      // console.log('current height from tip: ', current_height);
+
+      //this goes from iframe to content script because the content script can't capture click events on tip.html
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        chrome.tabs.sendMessage(tabs[0].id, {command: "tip_height", height: current_height});
+      });
+  }
   
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.command == "complaints") {
@@ -150,15 +174,13 @@ $(document).ready(function() {
         //   <div class="collapsible-body"></div>
         // </li>
       }
-      sendResponse({confirm: 'complaints complete'});
-      return true;
+
     }
 
     if (request.command == "card_height") {
-      var current_height = $("#cardContainer").outerHeight(true);
-      console.log('current height from tip: ', current_height);
-      sendResponse({height: current_height});
-      return true;
+      var current_height =  document.getElementById('cardContainer').getBoundingClientRect().height;
+      // console.log('current height from tip: ', current_height);
+      sendResponse({height: current_height})
     }
   });
 });

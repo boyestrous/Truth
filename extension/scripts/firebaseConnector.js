@@ -27,6 +27,7 @@ function queryForHostname() {
   var idsForComplaints = [];
   db.collection("corrections").where("hostname", "==", hostname)
       .onSnapshot(function(querySnapshot) {
+        console.log('updated query');
           querySnapshot.forEach(function(doc) {
               var docData = doc.data();
               //append ID to the object, so it can be attached to created HTML objects in content.js
@@ -132,7 +133,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
           console.error("Error adding document: ", error);
       });;
       
-      sendResponse({confirm: "data pushed: " + request.data});
+      sendResponse({confirm: "data pushed: " + newComplaint});
       return true;
     }
 
