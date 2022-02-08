@@ -10,8 +10,6 @@ $(document).ready(function(){
 
 M.AutoInit();
 
-// const uxStep3 = document.querySelector('.uxStep3');
-// const uxView = document.querySelector('.uxView');
 console.log("step 1: ",uxStep1);
 
  // init the plugin with some optional properties
@@ -21,9 +19,6 @@ console.log("step 1: ",uxStep1);
  var tour = {
      steps: [
          {element: 'uxStep1', text: 'Sometimes, there obvious falsehoods in plain sight. Highlight the text to activate the correction interface'},
-        //  {element: 'uxStep2', text: 'You can always start the ux tour guide again here. This also works on fixed items', position: 'fixed'},
-        //  {element: 'uxStep3', text: 'Includes auto scrolling.<br> Is also responsive. try resize the window!', direction: 'top'},
-         // {element: uxView, text: 'This demo page is based on MDL-lite framework.<br> Click here to see more about this awesome Material Design framework', position: 'fixed', direction: 'top'}
      ]
  };
  console.log('tour: ', tour);
@@ -40,7 +35,7 @@ console.log("step 1: ",uxStep1);
  uxStart(tour);
 
  function getSelectionText(bubbleTour) {
-     var tour = bubbleTour;
+    var tour = bubbleTour;
     var text = "";
     if (window.getSelection) {
         text = window.getSelection().toString();
@@ -88,17 +83,12 @@ console.log("step 1: ",uxStep1);
         var tour = {
             steps: [
                 {element: 'correctionBubble', text: 'You can submit your own information to help make this more factual! Type a message in the box and hit submit when done.', direction: 'left'},
-               //  {element: 'uxStep2', text: 'You can always start the ux tour guide again here. This also works on fixed items', position: 'fixed'},
-               //  {element: 'uxStep3', text: 'Includes auto scrolling.<br> Is also responsive. try resize the window!', direction: 'top'},
-                // {element: uxView, text: 'This demo page is based on MDL-lite framework.<br> Click here to see more about this awesome Material Design framework', position: 'fixed', direction: 'top'}
             ]
         };
       
       highlightedText = getSelectionText(tour);
-      // console.log("holder: ", holder);
       fullText = getSelectionParentElement().textContent;
       hostname = window.location.hostname;
-    //   user = getUsername();
       parent = getSelectionParentElement();
       console.log(parent);
       console.log("Parent Tag: ", parent.classList);
